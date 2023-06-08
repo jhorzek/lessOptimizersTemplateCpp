@@ -1,3 +1,3 @@
-[submodule "include/lessOptimizers"]
-	path = include/lessOptimizers
-	url = https://github.com/jhorzek/lessOptimizers
+[submodule "include/lesspar"]
+	path = include/lesspar
+	url = https://github.com/jhorzek/lesspar.git
