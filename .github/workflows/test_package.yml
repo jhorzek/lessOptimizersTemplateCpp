@@ -3,6 +3,7 @@ name: check cpp documentation
 on:
   push:
     branches: [ "main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
