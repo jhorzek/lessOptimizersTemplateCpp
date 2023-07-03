@@ -18,6 +18,8 @@ jobs:
        submodules: 'true'
     - name: install Cmake
       run: sudo apt-get install cmake 
+    - name: install BLAS
+      run: sudo apt-get install -y libopenblas-dev
     - name: install vcpkg
       run: |
         git clone https://github.com/Microsoft/vcpkg.git
