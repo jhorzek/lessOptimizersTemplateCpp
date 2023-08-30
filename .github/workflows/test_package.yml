@@ -5,34 +5,19 @@ on:
     branches: [ "main"]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
  build:
   runs-on: ubuntu-latest
     
   steps:
     - uses: actions/checkout@v3
-      with:
-       submodules: 'true'
-    - name: install Cmake
-      run: sudo apt-get install cmake 
-    - name: install BLAS
-      run: sudo apt-get install -y libopenblas-dev
-    - name: install vcpkg
+    - name: create build dir
+      run: mkdir build
+    - name: run cmake
       run: |
-        git clone https://github.com/Microsoft/vcpkg.git
-        ./vcpkg/bootstrap-vcpkg.sh
-    - name: build 
-      run: |
+        cd build 
+        cmake .. --preset=linux
+        cmake --build .
         ls
-        mkdir build 
-        cd build
-        cmake build .. -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
-        cd ..
-        cmake --build build
-        ls
-    - name: run test
-      run: |
-        build/testDocumentation
+        ./lesstimateTemplate
+

@@ -1,27 +1,37 @@
-cmake_minimum_required(VERSION 3.20.0)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # define project:
-project(testDocumentation VERSION 1.0)
+project(lesstimateTemplate 
+        VERSION 0.2.0
+        DESCRIPTION "Template for the lesstimate library"
+        HOMEPAGE_URL "https://jhorzek.github.io/lesstimateTemplate/"
+        LANGUAGES CXX)
 
-# specify dependencies:
-find_package(Armadillo REQUIRED)
-find_package(LAPACK REQUIRED)
-find_package(BLAS REQUIRED)
+# add dependencies
+# First: add CPM to download dependencies if necessary
+include(cmake/CPM.cmake)
 
-# including lesstimate
-set(lesstimate_DIR ${CMAKE_CURRENT_LIST_DIR}/include/lesstimate)
-find_package(lesstimate CONFIG REQUIRED)
+# add armadillo
+CPMAddPackage(
+	URL "https://sourceforge.net/projects/arma/files/armadillo-12.6.3.tar.xz"
+	NAME armadillo
+	VERSION 12.6.3
+)
+
+# add lesstimate
+# WARNING: REPLACE THE VERSION WITH THE GITHUB COMMIT THAT YOU WANT TO USE
+set(LESSTIMATE_VERSION "9f61f3fbc4ff1f288797e21a5f8d76e6af464f51")
+
+CPMAddPackage("gh:jhorzek/lesstimate#${LESSTIMATE_VERSION}")
 
 # set compiler settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# we want to use lesstimate without Rcpp -> set USE_R=0
-#add_definitions(-DUSE_R=0)
-
 # create target:
 add_executable(${PROJECT_NAME} "linear_regression.cpp")
 
-# include armadillo
-target_include_directories(${PROJECT_NAME} PRIVATE ${ARMADILLO_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${ARMADILLO_LIBRARIES} PRIVATE lesstimate::lesstimate LAPACK::LAPACK BLAS::BLAS)
+# link to dependencies
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+                      armadillo
+                      lesstimate::lesstimate)
